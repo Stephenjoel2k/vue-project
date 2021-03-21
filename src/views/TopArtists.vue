@@ -1,16 +1,54 @@
 <template>
-  <div class="TopArtists">
-    <h1>Top Artists</h1>
+    <v-container width=80 justify-center>
+      <v-row dense>
+        
+        <v-col
+          v-for="(item, i) in items"
+          :key="i"
+          cols="12"
+        >
 
-    <v-container class="my-5">
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque facere laborum ducimus a deleniti quisquam ex quaerat inventore? Quae aspernatur vero aliquid saepe sequi fugit distinctio officia, porro quasi ipsam.</p>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti inventore, dignissimos laborum, impedit quasi dolore, magni sit quis aut mollitia temporibus ipsam tenetur necessitatibus saepe tempore. Doloremque cumque repellat possimus?</p>
+
+          <v-card dark>
+
+            <div class="d-flex flex-no-wrap justify-space-between">
+              <div>
+                <v-card-title v-text="item.name"></v-card-title>
+                <v-card-subtitle v-text="item.popularity"></v-card-subtitle>
+              </div>
+              
+              <v-avatar class="ma-3" size="80" tile>
+                <v-img :src="item.images[1].url"></v-img>
+              </v-avatar>
+            </div>
+
+          </v-card>
+        </v-col>
+      </v-row>
     </v-container>
-  </div>
+
 </template>
 
 <script>
-export default {
 
-}
+  import axios from 'axios';
+
+  export default {
+    data() {
+      return {
+        items: []
+      }
+    },
+    async mounted(){
+      const access_token = "";
+
+      const url = "https://api.spotify.com/v1/me/top/artists?time_range=long_term&limit=50";
+      const response = await axios.get(url, {
+        headers: {
+          Authorization: "Bearer " + access_token
+        }
+      });
+      this.items = response.data.items;
+    }
+  }
 </script>

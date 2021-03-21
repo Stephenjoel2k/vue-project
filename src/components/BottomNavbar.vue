@@ -1,7 +1,7 @@
 <template>
   <v-card
   >
-    <v-bottom-navigation horizontal class="d-md-none">
+    <v-bottom-navigation app class="d-md-none" fixed >
       <v-btn color="deep-purple accent-4" to=/top-artists text>
         <span>Top Artists</span>
         <v-icon>mdi-account</v-icon>
@@ -13,7 +13,7 @@
       </v-btn>
 
       <v-btn color="deep-purple accent-4" to=/recently-played text>
-        <span>Recents</span>
+        <span>Recently Played</span>
         <v-icon>mdi-history</v-icon>
       </v-btn>
       

@@ -1,25 +1,52 @@
 <template>
-  <div class="TopTracks">
-      <h1>Top Tracks</h1>
+    <v-container width=80 justify-center>
+      <v-row dense>
 
-    <v-container class="my-5">
+        <v-col
+          v-for="(item, i) in items"
+          :key="i"
+          cols="12"
+        >
+          <v-card dark>
 
-      <v-layout row wrap justify-center>
-        <v-flex xs12 md4>
-          <v-btn outline block class="error">1</v-btn>
-        </v-flex>
-        <v-flex xs12 md4>
-          <v-btn outline block class="error">2</v-btn>
-        </v-flex>
-      </v-layout>
-    
+            <div class="d-flex flex-no-wrap justify-space-between">
+              <div>
+                <v-card-title v-text="item.name"></v-card-title>
+                <v-card-subtitle v-text="item.artists[0].name"></v-card-subtitle>
+              </div>
+              
+              <v-avatar class="ma-3" size="80" tile>
+                <v-img :src="item.album.images[1].url"></v-img>
+              </v-avatar>
+            </div>
+
+          </v-card>
+        </v-col>
+      </v-row>
     </v-container>
 
-  </div>
 </template>
 
 <script>
-export default {
 
-}
+  import axios from 'axios';
+
+  export default {
+    data() {
+      return {
+        items: []
+      }
+    },
+    async mounted(){
+     const access_token = "";
+
+      const url = "https://api.spotify.com/v1/me/top/tracks?time_range=long_term&limit=50";
+      const response = await axios.get(url, {
+        headers: {
+          Authorization: "Bearer " + access_token
+        }
+      });
+      this.items = response.data.items;
+    }
+  }
 </script>
