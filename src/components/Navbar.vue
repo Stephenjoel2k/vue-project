@@ -9,7 +9,7 @@
             <span>Habits</span>
         </v-app-bar-title>
         <v-spacer></v-spacer>
-        <v-btn color="green" href="http://localhost:3000/auth/login" v-if="!login">
+        <v-btn color="green" href="https://yourmusichabit.herokuapp.com/auth/login" v-if="!login">
             <v-icon left>mdi-import</v-icon>
             <span>Spotify</span>
         </v-btn>
