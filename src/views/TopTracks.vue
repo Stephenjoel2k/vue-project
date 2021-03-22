@@ -1,13 +1,38 @@
 <template>
-    <v-container width=80 justify-center>
-      <v-row dense>
+ 
+     <v-container width=80 justify-center>
 
-        <v-col
-          v-for="(item, i) in items"
-          :key="i"
-          cols="12"
-        >
-          <v-card dark>
+      
+      <v-card flat class="py-5">
+
+        <v-card-text>
+
+          <v-row align="center" justify="center">
+            <v-col cols="12" class="mb-5">
+              <h1 class="text-center">
+                Top Tracks
+              </h1>
+            </v-col>
+          </v-row>
+
+          <v-row align="center" justify="center">
+            <v-btn-toggle  mandatory>
+              <v-btn @click="displayTop('long_term')">All Time</v-btn>
+              <v-btn @click="displayTop('medium_term')">> 6 Months</v-btn>
+              <v-btn @click="displayTop('short_term')">> 1 Month</v-btn>
+            </v-btn-toggle>
+          </v-row>
+
+        </v-card-text>
+      </v-card>
+
+      
+
+      <v-row dense>
+        
+        <v-col v-for="(item, i) in items" :key="i" cols="12">
+
+          <v-card dark :href=item.external_urls.spotify target="_blank">
 
             <div class="d-flex flex-no-wrap justify-space-between">
               <div>
@@ -30,23 +55,34 @@
 <script>
 
   import axios from 'axios';
-
+  
   export default {
     data() {
       return {
-        items: []
+        items: [],
+        term: "long_term"
       }
     },
-    async mounted(){
-     const access_token = "";
+    methods : {
+      async displayTop(term){
+        const access_token = localStorage.access_token;
+        this.term = term;
 
-      const url = "https://api.spotify.com/v1/me/top/tracks?time_range=long_term&limit=50";
-      const response = await axios.get(url, {
-        headers: {
-          Authorization: "Bearer " + access_token
-        }
-      });
-      this.items = response.data.items;
+        const url = "https://api.spotify.com/v1/me/top/tracks?time_range=" + this.term + "&limit=50";
+        const response = await axios.get(url, {
+          headers: {
+            Authorization: "Bearer " + access_token
+          }
+        });
+        this.items = response.data.items;
+      }
+    },
+    // This is bruteforced. We need to make sure that we don't have to copy paste these two lines in every component
+    async mounted(){
+      if(!localStorage.access_token){
+        this.$router.push('/');
+      }
+      await this.displayTop(this.term);
     }
   }
 </script>

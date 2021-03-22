@@ -1,22 +1,44 @@
 <template>
+
+
     <v-container width=80 justify-center>
+
+      
+      <!-- Can be a separate component called buttons terms -->
+      <v-card flat class="py-5">
+        <v-card-text>
+
+          <v-row align="center" justify="center">
+            <v-col cols="12" class="mb-5">
+              <h1 class="text-center">
+                Top Artists
+              </h1>
+            </v-col>
+          </v-row>
+
+          
+          <v-row align="center" justify="center">
+            <v-btn-toggle mandatory>
+              <v-btn @click="displayTop('long_term')">All Time</v-btn>
+              <v-btn @click="displayTop('medium_term')">> 6 Months</v-btn>
+              <v-btn @click="displayTop('short_term')">> 1 Month</v-btn>
+            </v-btn-toggle>
+          </v-row>
+        </v-card-text>
+      </v-card>
+
+      
+
+      <!-- Can be a separate component called as tracks/artists cards -->
       <v-row dense>
-        
-        <v-col
-          v-for="(item, i) in items"
-          :key="i"
-          cols="12"
-        >
-
-
-          <v-card dark>
-
+        <v-col v-for="(item, i) in items" :key="i" cols="12">
+          <v-card dark :href=item.external_urls.spotify target="_blank">
             <div class="d-flex flex-no-wrap justify-space-between">
               <div>
                 <v-card-title v-text="item.name"></v-card-title>
                 <v-card-subtitle v-text="item.popularity"></v-card-subtitle>
               </div>
-              
+    
               <v-avatar class="ma-3" size="80" tile>
                 <v-img :src="item.images[1].url"></v-img>
               </v-avatar>
@@ -25,6 +47,7 @@
           </v-card>
         </v-col>
       </v-row>
+
     </v-container>
 
 </template>
@@ -36,19 +59,29 @@
   export default {
     data() {
       return {
-        items: []
+        items: [],
+        term: "long_term"
+      }
+    },
+    methods : {
+      async displayTop(term){
+        const access_token = localStorage.access_token;
+        this.term = term;
+
+        const url = "https://api.spotify.com/v1/me/top/artists?time_range=" + this.term + "&limit=50";
+        const response = await axios.get(url, {
+          headers: {
+            Authorization: "Bearer " + access_token
+          }
+        });
+        this.items = response.data.items;
       }
     },
     async mounted(){
-      const access_token = "";
-
-      const url = "https://api.spotify.com/v1/me/top/artists?time_range=long_term&limit=50";
-      const response = await axios.get(url, {
-        headers: {
-          Authorization: "Bearer " + access_token
-        }
-      });
-      this.items = response.data.items;
+      if(!localStorage.access_token){
+        this.$router.push('/');
+      }
+      await this.displayTop(this.term);
     }
   }
 </script>

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import Home from '../views/Home.vue'
 import TopTracks from '../views/TopTracks.vue'
 import TopArtists from '../views/TopArtists.vue'
 import Recent from '../views/Recent.vue'
@@ -7,6 +8,11 @@ import Recent from '../views/Recent.vue'
 Vue.use(VueRouter)
 
 const routes = [
+  {
+    path: '/',
+    name: 'Home',
+    component: Home
+  },
   {
     path: '/top-tracks',
     name: 'Top Tracks',

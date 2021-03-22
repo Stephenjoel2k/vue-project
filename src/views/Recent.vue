@@ -1,17 +1,74 @@
 <template>
-  <div class="Recent">
-    <h1>Recent</h1>
+    
 
-    <v-container class="my-5">
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque facere laborum ducimus a deleniti quisquam ex quaerat inventore? Quae aspernatur vero aliquid saepe sequi fugit distinctio officia, porro quasi ipsam.</p>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti inventore, dignissimos laborum, impedit quasi dolore, magni sit quis aut mollitia temporibus ipsam tenetur necessitatibus saepe tempore. Doloremque cumque repellat possimus?</p>
+    <v-container width=80 justify-center>
+ 
+      <v-card flat class="py-5">
+        <v-card-text>
+          <v-row align="center" justify="center">
+            <v-col cols="12" class="mb-5">
+              <h1 class="text-center">
+                Recently Played
+              </h1>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
+
+
+
+      <!-- Can be a separate component called as tracks/artists cards -->
+      <v-row dense>
+        <v-col v-for="(item, i) in items" :key="i" cols="12">
+          <v-card dark :href=item.track.external_urls.spotify target="_blank">
+            <div class="d-flex flex-no-wrap justify-space-between">
+              <div>
+                <v-card-title v-text="item.track.name"></v-card-title>
+                <v-card-subtitle v-text="item.track.album.artists[0].name"></v-card-subtitle>
+              </div>
+    
+              <v-avatar class="ma-3" size="80" tile>
+                <v-img :src="item.track.album.images[1].url"></v-img>
+              </v-avatar>
+            </div>
+
+          </v-card>
+        </v-col>
+      </v-row>
+
     </v-container>
 
-  </div>
 </template>
 
 <script>
-export default {
-    
-}
+
+  import axios from 'axios';
+
+  export default {
+    data() {
+      return {
+        items: [],
+      }
+    },
+    methods : {
+      async getRecentlyPlayed(){
+        const access_token = localStorage.access_token;
+        const url = "https://api.spotify.com/v1/me/player/recently-played?limit=50"
+        const response = await axios.get(url, {
+          headers: {
+            Authorization: "Bearer " + access_token
+          }
+        });
+        this.items = response.data.items;
+      }
+    },
+    async mounted(){
+      if(!localStorage.access_token){
+        this.$router.push('/');
+      }
+      // localStorage.access_token = this.$route.query.access_token
+      // 
+      await this.getRecentlyPlayed();
+    }
+  }
 </script>
