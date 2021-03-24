@@ -20,8 +20,8 @@
           <v-row align="center" justify="center">
             <v-btn-toggle mandatory>
               <v-btn @click="displayTop('long_term')">All Time</v-btn>
-              <v-btn @click="displayTop('medium_term')">> 6 Months</v-btn>
-              <v-btn @click="displayTop('short_term')">> 1 Month</v-btn>
+              <v-btn @click="displayTop('medium_term')">~ 6 Months</v-btn>
+              <v-btn @click="displayTop('short_term')">~ Month</v-btn>
             </v-btn-toggle>
           </v-row>
         </v-card-text>

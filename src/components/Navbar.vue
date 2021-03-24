@@ -4,15 +4,10 @@
     <!-- Top Bar the one that's fixed -->
     <v-app-bar app class="black">
         <v-app-bar-nav-icon dark class="d-none d-md-flex" @click="drawer = !drawer"></v-app-bar-nav-icon>
-        <v-app-bar-title class="text-uppercase white--text">
+        <v-app-bar-title class="text-lowercase white--text">
             <span class="font-weight-light">Music</span>
-            <span>Habits</span>
+            <span>Habits.</span>
         </v-app-bar-title>
-        <v-spacer></v-spacer>
-        <v-btn color="green" href="https://yourmusichabit.herokuapp.com/auth/login" v-if="!login">
-            <v-icon left>mdi-import</v-icon>
-            <span>Spotify</span>
-        </v-btn>
     </v-app-bar>
 
     <!-- Sidebar the one that toggles -->
@@ -44,15 +39,12 @@ export default {
         [ 'mdi-album', 'Top Tracks',  '/top-tracks' ],
         [ 'mdi-history', 'Recent', '/recently-played' ],
       ],
-      login: true,
       value: 1,
     }
   },
-  async mounted(){
-    if(!localStorage.access_token){
-      this.login = false;
-    }else{
-      this.login = true;
+  methods : {
+    isLogin() {
+      return this.$route.name === 'TopTracks'
     }
   }
 }

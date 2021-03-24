@@ -7,6 +7,7 @@ import Recent from '../views/Recent.vue'
 
 Vue.use(VueRouter)
 
+//Make sure the Home page doesn't heve the navbar
 const routes = [
   {
     path: '/',
