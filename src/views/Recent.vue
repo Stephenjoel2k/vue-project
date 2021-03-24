@@ -66,8 +66,7 @@
       if(!localStorage.access_token){
         this.$router.push('/');
       }
-      // localStorage.access_token = this.$route.query.access_token
-      // 
+
       await this.getRecentlyPlayed();
     }
   }
