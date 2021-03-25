@@ -1,6 +1,6 @@
 <template>
     <v-card flat class="py-5" color="#EAEBEB">
-        <v-img :src="formatBg(header_background)" class="white--text align-end" height="200px">
+        <v-img :src="formatBg(header_background)" class="white--text align-end" height="300px">
         <v-card-text>
          
           <v-row align="center" justify="center">
