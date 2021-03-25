@@ -31,7 +31,7 @@
           localStorage.removeItem("expiry");
           window.location.href = 'https://yourmusichabit.herokuapp.com/auth/login';
         }else{
-          this.$router.push('top-tracks');
+          this.$router.push('dashboard');
         }
       }
     }
@@ -46,7 +46,7 @@
           const time = new Date();
           time.setMinutes(time.getMinutes() + 45);
           localStorage.expiry = time;
-          this.$router.push('top-tracks');
+          this.$router.push('dashboard');
       }
 
       this.content = true;
