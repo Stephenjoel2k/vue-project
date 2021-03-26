@@ -4,7 +4,8 @@
       <!-- Display if content is true -->
         <div v-if="content">
           <h2>Please Connect with spotify to continue!</h2>
-          <v-btn color="green" href="https://yourmusichabit.herokuapp.com/auth/login">
+          <!-- Placeholder until hosted -->
+          <v-btn color="green" href= "https://yourmusichabit.herokuapp.com/auth/login">
             <v-icon left>mdi-import</v-icon>
             <span>Spotify</span>
           </v-btn>

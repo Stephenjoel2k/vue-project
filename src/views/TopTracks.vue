@@ -59,16 +59,16 @@
     },
     methods : {
       async displayTop(term){
-        const access_token = localStorage.access_token;
         this.term = term;
 
-        const url = "https://api.spotify.com/v1/me/top/tracks?time_range=" + this.term + "&limit=50";
-        const response = await axios.get(url, {
-          headers: {
-            Authorization: "Bearer " + access_token
-          }
-        });
-        this.items = response.data.items;
+        const url = "https://yourmusichabit.herokuapp.com/api/user/top-tracks?term=" + this.term;
+            const response = await axios.get(url, {
+                headers: {
+                    Authorization: "Bearer " + localStorage.access_token,
+                    "Access-Control-Allow-Origin": "*",
+                }
+            });
+        this.items = response.data.data.items;
       }
     },
     // This is bruteforced. We need to make sure that we don't have to copy paste these two lines in every component

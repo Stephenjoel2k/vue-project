@@ -3,7 +3,9 @@
   <v-app>
     <Navbar /> 
     <v-main class="ma-5">
+      <transition name="fade" mode="out-in">
       <router-view></router-view>
+      </transition>
     </v-main>
     <BottomNavbar />
   </v-app>

@@ -45,14 +45,14 @@
     },
     methods : {
       async getRecentlyPlayed(){
-        const access_token = localStorage.access_token;
-        const url = "https://api.spotify.com/v1/me/player/recently-played?limit=50"
-        const response = await axios.get(url, {
-          headers: {
-            Authorization: "Bearer " + access_token
-          }
-        });
-        this.items = response.data.items;
+        const url = "https://yourmusichabit.herokuapp.com/api/user/recently-played"
+            const response = await axios.get(url, {
+                headers: {
+                    Authorization: "Bearer " + localStorage.access_token,
+                    "Access-Control-Allow-Origin": "*",
+                }
+            });
+        this.items = response.data.data.items;
       },
       format(value){
         if(value){

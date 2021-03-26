@@ -32,14 +32,14 @@
     },
     methods : {
         async getUser(){
-            const access_token = localStorage.access_token;
-            const url = "https://api.spotify.com/v1/me"
+            const url = "https://yourmusichabit.herokuapp.com/api/user"
             const response = await axios.get(url, {
                 headers: {
-                    Authorization: "Bearer " + access_token
+                    Authorization: "Bearer " + localStorage.access_token,
+                    "Access-Control-Allow-Origin": "*",
                 }
             });
-            this.profile = response.data;
+            this.profile = response.data.data;
         }
     },
     async mounted(){

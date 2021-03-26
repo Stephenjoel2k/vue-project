@@ -2,10 +2,10 @@
 
 
     <v-container width=80 justify-center >
-
+      
       <Header header_title="Top Artists" header_background='artist' />
       
-      <!-- Can eb a separate buttons component -->
+      <!-- Can be a separate buttons component -->
       <v-row align="center" justify="center">
         <v-btn-toggle mandatory class="mb-3">
           <v-btn @click="displayTop('long_term')" class="caption black white--text">All Time</v-btn>
@@ -54,16 +54,16 @@
     },
     methods : {
       async displayTop(term){
-        const access_token = localStorage.access_token;
         this.term = term;
 
-        const url = "https://api.spotify.com/v1/me/top/artists?time_range=" + this.term + "&limit=50";
-        const response = await axios.get(url, {
-          headers: {
-            Authorization: "Bearer " + access_token
-          }
-        });
-        this.items = response.data.items;
+        const url = "https://yourmusichabit.herokuapp.com/api/user/top-artists?term=" + this.term;
+            const response = await axios.get(url, {
+                headers: {
+                    Authorization: "Bearer " + localStorage.access_token,
+                    "Access-Control-Allow-Origin": "*",
+                }
+            });
+        this.items = response.data.data.items;
       }
     },
     async mounted(){
