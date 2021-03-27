@@ -3,22 +3,10 @@
      <v-container width=80 justify-center>
        
       <Header header_title="Top Tracks" header_background='track' />
+      <TermButtons @display-top="displayTop" />
+      <Preloader :items="items"/>
 
-      <!-- Can eb a separate buttons component -->
-
-      <v-row align="center" justify="center">
-        <v-btn-toggle mandatory class="mb-3">
-          <v-btn @click="displayTop('long_term')" class="caption black white--text">All Time</v-btn>
-          <v-btn @click="displayTop('medium_term')" class="caption black white--text">~ 6 Months</v-btn>
-          <v-btn @click="displayTop('short_term')" class="caption black white--text" >~ 1 Month</v-btn>
-        </v-btn-toggle>
-      </v-row>
-
-    
-
-      <!-- Can be a separate component called as tracks/artists cards -->
-
-
+      <!-- Display the Tracks -->
       <v-row dense>
         <v-col v-for="(item, i) in items" :key="i" cols="12">
           <v-card dark :href=item.external_urls.spotify target="_blank">
@@ -28,17 +16,13 @@
                 <v-card-subtitle>{{item.artists[0].name}}</v-card-subtitle>
                 <v-card-subtitle> popularity: {{item.popularity}}%</v-card-subtitle>
               </div>
-    
               <v-avatar class="ma-3" size="100" tile>
                 <v-img :src="item.album.images[1].url"></v-img>
               </v-avatar>
             </div>
-
           </v-card>
         </v-col>
       </v-row>
-
-
 
     </v-container>
 
@@ -48,9 +32,11 @@
 
   import axios from 'axios';
   import Header from '../components/Header';
+  import Preloader from '../components/Preloader';
+  import TermButtons from '../components/TermButtons'
 
   export default {
-    components: {Header},
+    components: {Header, Preloader, TermButtons},
     data() {
       return {
         items: [],
@@ -71,7 +57,6 @@
         this.items = response.data.data.items;
       }
     },
-    // This is bruteforced. We need to make sure that we don't have to copy paste these two lines in every component
     async mounted(){
       if(!localStorage.access_token){
         this.$router.push('/');

@@ -6,6 +6,7 @@
       <Header header_title="Recently Played" header_background='recent' />
 
       <!-- Can be a separate component called as tracks/artists cards -->
+      <Preloader :items="items" />
 
       <v-row dense>
         <v-col v-for="(item, i) in items" :key="i" cols="12">
@@ -35,9 +36,10 @@
   import axios from 'axios';
   import moment from 'moment'
   import Header from '../components/Header'
+  import Preloader from '../components/Preloader.vue';
 
   export default {
-    components: {Header},
+    components: {Header, Preloader},
     data() {
       return {
         items: [],

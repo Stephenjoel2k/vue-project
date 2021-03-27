@@ -6,6 +6,7 @@ import TopArtists from '../views/TopArtists.vue'
 import Recent from '../views/Recent.vue'
 import Dashboard from '../views/Dashboard.vue'
 import Profile from '../views/Profile.vue'
+import YourTaste from '../views/YourTaste.vue'
 
 Vue.use(VueRouter)
 
@@ -40,6 +41,11 @@ const routes = [
     path: '/profile',
     name: 'Profile',
     component: Profile
+  },
+  {
+    path: '/your-taste',
+    name: 'YourTaste',
+    component: YourTaste
   }
 ]
 

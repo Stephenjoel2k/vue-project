@@ -4,18 +4,10 @@
     <v-container width=80 justify-center >
       
       <Header header_title="Top Artists" header_background='artist' />
+      <TermButtons @display-top="displayTop" />
+      <Preloader :items="items"/>
       
-      <!-- Can be a separate buttons component -->
-      <v-row align="center" justify="center">
-        <v-btn-toggle mandatory class="mb-3">
-          <v-btn @click="displayTop('long_term')" class="caption black white--text">All Time</v-btn>
-          <v-btn @click="displayTop('medium_term')" class="caption black white--text">~ 6 Months</v-btn>
-          <v-btn @click="displayTop('short_term')" class="caption black white--text" >~ 1 Month</v-btn>
-        </v-btn-toggle>
-      </v-row>
-      
-
-      <!-- Can be a separate component called as tracks/artists cards -->
+      <!-- Display the Artists -->
       <v-row dense>
         <v-col v-for="(item, i) in items" :key="i" cols="12">
           <v-card dark :href=item.external_urls.spotify target="_blank">
@@ -25,12 +17,10 @@
                 <v-card-subtitle>{{item.genres}}</v-card-subtitle>
                 <v-card-subtitle> popularity: {{item.popularity}}%</v-card-subtitle>
               </div>
-    
               <v-avatar class="ma-3" size="100" tile>
                 <v-img :src="item.images[1].url"></v-img>
               </v-avatar>
             </div>
-
           </v-card>
         </v-col>
       </v-row>
@@ -43,9 +33,11 @@
 
   import axios from 'axios';
   import Header from '../components/Header';
+  import Preloader from '../components/Preloader';
+  import TermButtons from '../components/TermButtons';
 
   export default {
-    components: {Header},
+    components: {Header, Preloader, TermButtons},
     data() {
       return {
         items: [],
