@@ -78,7 +78,6 @@
       if(!localStorage.access_token){
         this.$router.push('/');
       }
-      console.log("hello")
       await this.getRecentlyPlayed();
     }
   }
