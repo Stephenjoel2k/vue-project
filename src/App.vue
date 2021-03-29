@@ -24,9 +24,7 @@ export default {
   methods: {
     isValidStorage() {
       //If user never logged in
-      if(!localStorage.access_token){
-        this.$router.push('/');
-      }
+     
 
       //if the user had previously logged in then handle token
       if(localStorage.expiry && localStorage.access_token){
@@ -41,6 +39,9 @@ export default {
     }
   },
   mounted: function () {
+     if(!localStorage.access_token){
+        this.$router.push('/');
+      }
         this.$nextTick(function () {
             window.setInterval(() => {
                 this.isValidStorage()

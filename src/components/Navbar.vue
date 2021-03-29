@@ -42,8 +42,7 @@ export default {
         [ 'mdi-account', 'Top Artists', '/top-artists' ],
         [ 'mdi-album', 'Top Tracks',  '/top-tracks' ],
         [ 'mdi-history', 'Recent', '/recently-played' ],
-        ['mdi-glass-wine', 'Your Taste', '/your-taste' ]
-        
+        ['mdi-tree', 'Discovery Tree', '/tree' ]
       ],
       value: 1,
     }

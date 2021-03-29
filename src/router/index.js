@@ -6,7 +6,7 @@ import TopArtists from '../views/TopArtists.vue'
 import Recent from '../views/Recent.vue'
 import Dashboard from '../views/Dashboard.vue'
 import Profile from '../views/Profile.vue'
-import YourTaste from '../views/YourTaste.vue'
+import Tree from '../views/Tree.vue'
 
 Vue.use(VueRouter)
 
@@ -43,10 +43,10 @@ const routes = [
     component: Profile
   },
   {
-    path: '/your-taste',
-    name: 'YourTaste',
-    component: YourTaste
-  }
+    path: '/tree',
+    name: 'Tree',
+    component: Tree
+  },
 ]
 
 const router = new VueRouter({
