@@ -22,7 +22,8 @@
                 <template v-slot:selection="{ attr, on, item, selected }">
                     <v-chip v-bind="attr" :input-value="selected" color="blue-grey" class="white--text" v-on="on">
                         <v-avatar left>
-                            <v-img src="https://images.unsplash.com/photo-1485550409059-9afb054cada4?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MXx8cmFuZG9tfGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60"></v-img>
+                            <v-img v-if="type == 'track'" :src="item.album.images[0].url"></v-img>
+                            <v-img v-else-if="item.images.length > 1" :src="item.images[0].url"></v-img>
                         </v-avatar>
                         <span v-text="item.name"></span>
                     </v-chip>
@@ -31,12 +32,12 @@
                 <template v-slot:item="{ item }">
                     <v-list-item-avatar  v-if="item != undefined && item != null">
                         <v-img v-if="type == 'track'" :src="item.album.images[0].url"></v-img>
-                        <v-img v-else :src="item.images[0].url"></v-img>
+                        <v-img v-else-if="item.images.length > 1" :src="item.images[0].url"></v-img>
                     </v-list-item-avatar>
                     <v-list-item-content>
                     <v-list-item-title v-text="item.name"></v-list-item-title>
                     
-                    <v-list-item-subtitle v-text="item.symbol"></v-list-item-subtitle>
+                    <v-list-item-subtitle v-if="type == 'track'" v-text="item.artists[0].name"></v-list-item-subtitle>
                     </v-list-item-content>
                     <v-list-item-action>
                     <v-icon>{{icon}}</v-icon>
@@ -121,7 +122,7 @@ export default {
             })    
             .catch(e => console.log(e))
             .finally(() => (this.isLoading = false))
-        },500),
+        },200),
         updateSearchType(type){
             this.type = type;
             this.items = [];
