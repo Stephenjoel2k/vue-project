@@ -7,11 +7,18 @@
       <router-view></router-view>
       </transition>
     </v-main>
+     <v-snackbar bottom right :value="updateExists" :timeout="0" color="primary">
+    An update is available
+    <v-btn text @click="refreshApp">
+      Update
+    </v-btn>
+  </v-snackbar>
     <BottomNavbar />
   </v-app>
 </template>
 
 <script>
+import update from './mixin/update'
 import Navbar from './components/Navbar'
 import BottomNavbar from './components/BottomNavbar'
 
@@ -21,6 +28,7 @@ export default {
   data: () => ({
 
   }),
+  mixins: [update],
   methods: {
     isValidStorage() {
       //If user never logged in
