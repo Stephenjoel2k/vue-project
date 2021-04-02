@@ -14,18 +14,11 @@
       <router-view></router-view>
       </transition>
     </v-main>
-     <v-snackbar bottom right :value="updateExists" :timeout="0" color="primary">
-    An update is available
-    <v-btn text @click="refreshApp">
-      Update
-    </v-btn>
-  </v-snackbar>
     <BottomNavbar />
   </v-app>
 </template>
 
 <script>
-import update from './mixin/update'
 import Navbar from './components/Navbar'
 import BottomNavbar from './components/BottomNavbar'
 
@@ -47,11 +40,15 @@ export default {
       this.deferredPrompt = null;
     });
   },
-  mixins: [update],
   methods: {
+    async dismiss() {
+      this.deferredPrompt = null;
+    },
+    async install() {
+      this.deferredPrompt.prompt();
+    },
     isValidStorage() {
       //If user never logged in
-     
 
       //if the user had previously logged in then handle token
       if(localStorage.expiry && localStorage.access_token){
@@ -64,12 +61,6 @@ export default {
         }
       }
     },
-    async dismiss() {
-      this.deferredPrompt = null;
-    },
-    async install() {
-      this.deferredPrompt.prompt();
-    }
   },
   mounted: function () {
      if(!localStorage.access_token){

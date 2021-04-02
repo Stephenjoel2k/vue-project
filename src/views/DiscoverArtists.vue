@@ -3,9 +3,9 @@
 
         <Header header_title="Discover Artists" header_background='discover' />
         
-        <!-- Toolbar to search a song -->
-            <v-autocomplete dark :search-input.sync="search" :items="items" :loading="isLoading" chips clearable
-            hide-details hide-selected item-text="name" item-value="id" :label="query_label" @input="onInput" return-object solo rounded>
+        <!-- Searchbar to search a artists -->
+        <v-autocomplete 
+            dark :search-input.sync="search" :items="items" :loading="isLoading" chips clearable hide-details hide-selected item-text="name" item-value="id" label="Search an Artist" @input="displaySimilar" return-object solo rounded>
 
                 <template v-slot:no-data>
                     <v-list-item>
@@ -19,7 +19,7 @@
                     <v-chip v-bind="attr" :input-value="selected" color="blue-grey" class="white--text" v-on="on">
                         <v-avatar left>
                             <v-img v-if="type == 'track'" :src="item.album.images[0].url"></v-img>
-                            <v-img v-else-if="item.images.length > 1" :src="item.images[0].url"></v-img>
+                            <v-img v-else-if="item.images.length > 0" :src="item.images[0].url"></v-img>
                         </v-avatar>
                         <span v-text="item.name"></span>
                     </v-chip>
@@ -28,22 +28,22 @@
                 <template v-slot:item="{ item }">
                     <v-list-item-avatar  v-if="item != undefined && item != null">
                         <v-img v-if="type == 'track'" :src="item.album.images[0].url"></v-img>
-                        <v-img v-else-if="item.images.length > 1" :src="item.images[0].url"></v-img>
+                        <v-img v-else-if="item.images.length > 0" :src="item.images[0].url"></v-img>
                     </v-list-item-avatar>
                     <v-list-item-content>
-                    <v-list-item-title v-text="item.name"></v-list-item-title>
-                    
-                    <v-list-item-subtitle v-if="type == 'track'" v-text="item.artists[0].name"></v-list-item-subtitle>
+                        <v-list-item-title v-text="item.name"></v-list-item-title>
+                        <v-list-item-subtitle v-if="type == 'track'" v-text="item.artists[0].name"></v-list-item-subtitle>
                     </v-list-item-content>
                     <v-list-item-action>
-                    <v-icon>{{icon}}</v-icon>
+                        <v-icon>mdi-account</v-icon>
                     </v-list-item-action>
                 </template>
 
-            </v-autocomplete>
+        </v-autocomplete>
 
-        <!-- The top "similar to" artist -->
-        <v-card dark class="mt-5" v-if="selected != null">
+        <!-- The selected artist -->
+        <v-card 
+            dark class="mt-5" v-if="selected != null">
             <h3 class="text-center grey">Artists similar to</h3>
             <div class="d-flex flex-no-wrap justify-space-between"> 
               <div>
@@ -56,114 +56,111 @@
                 </v-card-title>
                 
                 <v-flex class="d-flex flex-wrap ma-2">
-                    <v-btn outlined small  @click="playPreview(selected.id)">Preview</v-btn>
+                    <v-btn outlined small  @click="previewTrackFromArtist(selected.id)">Preview</v-btn>
                 </v-flex>
               </div>
               <v-avatar class="ma-3" size="100" tile>
-                <v-img :src="selected.images[1].url"></v-img>
+                <v-img v-if="selected.images.length > 0 && selected.images[0].url" :src="selected.images[0].url"></v-img>
+                <span v-else>N.A</span>
               </v-avatar>
             </div>
         </v-card>
 
         <v-divider class="ma-3"></v-divider>
 
-            <div class="text-center" v-if="selected != null" @click="shuffle">
-                <v-btn class="green ma-2">
-                    Random <v-icon>
+        <!-- Playback button -->
+        <div class="playback-buttons">
+            <div class="text-center">
+                <v-btn class="green ma-2" v-if="selected != null" @click="shuffle">
+                    <v-icon>
                         mdi-shuffle
                     </v-icon>
                 </v-btn>
+                <v-btn class="error ma-2" v-if="preview != null" @click="stopAudio">
+                    <v-icon>
+                        mdi-stop
+                    </v-icon>
+                </v-btn>
+                <v-btn class="warning ma-2" v-if="preview != null" @click="playAudio">
+                    <v-icon>
+                        mdi-play
+                    </v-icon>
+                </v-btn>
             </div>
-        
-    
-    <div class="text-center">
-        <v-btn class="error ma-2" v-if="preview != null" @click="stopAudio">
-            Stop <v-icon>
-                mdi-stop
-            </v-icon>
-        </v-btn>
-        <v-btn class="warning ma-2" v-if="player == false && track != null" @click="player = !player">
-            Play <v-icon>
-                mdi-play
-            </v-icon>
-        </v-btn>
-    </div>
+        </div>
 
+        <!-- The music player -->
+        <!-- Problems: The music progress bar isn't synced. -->
+        <div class="text-center" v-if="track!=null">
+            <v-bottom-sheet dark inset v-model="player">
 
+            <v-card tile>
+                <v-progress-linear
+                :value="20"
+                class="my-0"
+                height="3"
+                ></v-progress-linear>
 
-  <div class="text-center" v-if="track!=null">
-    <v-bottom-sheet dark inset v-model="player">
+                <v-list>
+                <v-list-item>
+                   
+                    <v-list-item-avatar tile>
+                        <img v-if="track.album.images[0].url" :src="track.album.images[0].url">
+                        <span v-else>{{track.name[0]}}</span>
+                    </v-list-item-avatar>
+                    
+                    <v-list-item-content>    
+                        <v-list-item-title>{{track.artists[0].name}}</v-list-item-title>
+                        <v-list-item-subtitle>{{track.name}}</v-list-item-subtitle>
+                    </v-list-item-content>
 
-      <v-card tile>
-        <v-progress-linear
-          :value="20"
-          class="my-0"
-          height="3"
-        ></v-progress-linear>
+                    <v-spacer></v-spacer>
 
-        <v-list>
-          <v-list-item>
-              <v-list-item-avatar tile>
-                    <img :src="track.album.images[0].url">
-                </v-list-item-avatar>
-            <v-list-item-content>
-                
-              <v-list-item-title>{{track.artists[0].name}}</v-list-item-title>
-              <v-list-item-subtitle>{{track.name}}</v-list-item-subtitle>
-            </v-list-item-content>
+                    <v-list-item-icon :class="{ 'mx-5': $vuetify.breakpoint.mdAndUp }">
+                        <v-btn icon @click="toggleLike">
+                            <v-icon v-if="!liked">mdi-heart-outline</v-icon>
+                            <v-icon v-else color="error" >mdi-heart</v-icon>
+                        </v-btn>
+                        <v-btn icon @click="togglePlayState">
+                            <v-icon>{{playback_icon}}</v-icon>
+                        </v-btn>
+                        <v-btn icon @click="shuffle">
+                            <v-icon>mdi-shuffle</v-icon>
+                        </v-btn>
+                    </v-list-item-icon>
+                </v-list-item>
+                </v-list>
+            </v-card>
+            </v-bottom-sheet>
+        </div>
 
-            <v-spacer></v-spacer>
-
-            <v-list-item-icon :class="{ 'mx-5': $vuetify.breakpoint.mdAndUp }">
-              <v-btn icon @click="stopAudio">
-                <v-icon>mdi-stop</v-icon>
-              </v-btn>
-              <v-btn icon @click="togglePlayState">
-                <v-icon>{{playback_icon}}</v-icon>
-              </v-btn>
-              <v-btn icon>
-                <v-icon :color="color" @click="toggleLike">mdi-heart</v-icon>
-              </v-btn>
-            </v-list-item-icon>
-
-            <v-list-item-icon
-              class="ml-0"
-              :class="{ 'mr-3': $vuetify.breakpoint.mdAndUp }"
-            >
-            </v-list-item-icon>
-          </v-list-item>
-        </v-list>
-      </v-card>
-    </v-bottom-sheet>
-  </div>
-
-    <v-row dense>
-
-        <!-- The component tracks -->
-        <v-col v-for="(item) in related_artists" :key="item.id" cols="12">
-          <v-card dark>
-            <div class="d-flex flex-no-wrap justify-space-between">
-              <div>
-                <v-card-title>
-                    {{item.name}}
-                    <a :href=item.external_urls.spotify target="_blank">
-                        <img class="ml-2" height="24" src="https://img.icons8.com/fluent/48/000000/spotify.png"/>
-                    </a>
-                </v-card-title>
-                <v-flex class="d-flex flex-wrap">
-                    <v-btn outlined small class="ma-2" @click="playPreview(item.id)">Preview</v-btn>
-                <!-- Add function to preview similar -->
-                    <v-btn outlined small class="ma-2" @click="displaySimilar(item)">Find Similar</v-btn>
-                </v-flex>
-              </div>
-              <v-avatar class="ma-3" size="100" tile>
-                <v-img :src="item.images[1].url"></v-img>
-              </v-avatar>
-            </div>
-          </v-card>
-        </v-col>
-
-      </v-row>
+        <!-- Similar tracks component -->
+        <v-row dense v-if="related_artists.length > 1">
+            <!-- The component tracks -->
+            <v-col v-for="(item) in related_artists" :key="item.id" cols="12">
+            <v-card dark>
+                <div class="d-flex flex-no-wrap justify-space-between">
+                <div>
+                    <v-card-title>
+                        {{item.name}}
+                        <a :href=item.external_urls.spotify target="_blank">
+                            <img class="ml-2" height="24" src="https://img.icons8.com/fluent/48/000000/spotify.png"/>
+                        </a>
+                    </v-card-title>
+                    <v-flex class="d-flex flex-wrap">
+                        <v-btn outlined small class="ma-2" @click="previewTrackFromArtist(item.id)">Preview</v-btn>
+                    <!-- Add function to preview similar -->
+                        <v-btn outlined small class="ma-2" @click="displaySimilar(item)">Find Similar</v-btn>
+                    </v-flex>
+                </div>
+                <v-avatar class="ma-3" size="100" tile>
+                    <v-img v-if="item.images.length > 0 && item.images[0].url" :src="item.images[0].url"></v-img>
+                    <span v-else>N.A</span>
+                </v-avatar>
+                </div>
+            </v-card>
+            </v-col>
+        </v-row>
 
 
     </v-container>
@@ -179,21 +176,24 @@ export default {
     components: {Header},
     data(){
         return{
+            //Autocomplete data
             items: [],
-            related_artists: [],
-            query_label: "Search Artist",
-            type: "artist",
-            search: null,
-            icon: "mdi-account",
             isLoading: false,
             model: null,
             tab: null,
-            selected: null,
-            preview: null,
-            track: null,
-            player: false,
-            playback_icon: "mdi-pause",
-            color: null
+            search: null,
+            type: "artist",
+
+            selected: null,    //selected artist info
+            related_artists: [],   //related artists similar to the selected artist
+
+
+            artist_top_tracks: null,   //top tracks artist the user wants to preview music of
+            preview: null,     //preview url
+            track: null,       //Track info of the previewing song
+            player: false,      //Player state toggle
+            playback_icon: "mdi-pause",     //Default playback state
+            liked: false         //Like/Dislike the current song
         }
     },
     watch: {
@@ -206,116 +206,92 @@ export default {
       },
     },
     methods: {
-        displaySimilar: function(val){
+        displaySimilar: async function(val){
             this.selected = val;
-            this.getSimilarArtists();
-        },
-        onInput: function(val) {
-            this.selected = val;
-            this.getSimilarArtists();
-        },
-
-        doSearch: _.debounce(function() {
-            if(this.search == null || this.search.length == 0){
-                return;
-            }
-
-             this.isLoading = true
-
-            var url = "https://api.spotify.com/v1/search?q=" + this.search + "&type=" + this.type;
-            if(localStorage.profile){
-                const profile = JSON.parse(localStorage.getItem('profile'));
-                url = "https://api.spotify.com/v1/search?q=" + this.search + "&type=" + this.type + "&market=" + profile.country;
-            }
-            axios.get(url, {
-                headers: {
-                    Authorization: "Bearer " + localStorage.access_token
-                }
-            })
-            
-            .then((response) => {
-                if(response.data.error || !response.data){
-                    this.items = [];
-                }else if(response.data){
-                    this.items = response.data[this.type + "s"].items;
-                }
-            })    
-            .catch(e => console.log(e))
-            .finally(() => (this.isLoading = false))
-        },200),
-
-        //THIS IS THE FUNCTION WE NEED TO WOK ON
-        async playPreview(id) {
-            var url = `https://api.spotify.com/v1/artists/${id}/top-tracks?market=US`;
-            if(localStorage.profile){
-                const profile = JSON.parse(localStorage.getItem('profile'));
-                url = `https://api.spotify.com/v1/artists/${id}/top-tracks?market=${profile.country}`;
-            }
-            const response = await axios.get(url, {
-                headers: {
-                    Authorization: "Bearer " + localStorage.access_token,
-                }
-            })
-            const tracks = [] 
-            response.data.tracks.forEach(track => {
-                if(track.preview_url != null){
-                    tracks.push(track);
-                }
-            })
-            if(this.preview != null){
-                this.stopAudio()
-            }
-            const length = tracks.length;
-            const random = this.getRandomInt(length-1);
-            if(tracks.length > 1){
-                this.track = tracks[random];
-                console.log(this.track);
-                this.preview = new Audio(this.track.preview_url);
-            }
-            this.playAudio()
+            await this.getSimilarArtists();
         },
         async shuffle(){
             var length = this.related_artists.length;
             var random = this.getRandomInt(length-1);
             var id = this.related_artists[random].id;
-            await this.playPreview(id);
+            await this.previewTrackFromArtist(id);
         },
         playAudio(){
-            this.player = !this.player;
+            this.player = true;
             this.playback_icon = "mdi-pause";
             this.preview.play();
         },
-        togglePlayState(){
-            if(this.playback_icon == "mdi-pause"){
-                this.preview.pause();
-                this.playback_icon = "mdi-play";
-            }else{
-                this.preview.play();
-                this.playback_icon = "mdi-pause";
-            }
+        pauseAudio(){
+            this.preview.pause();
+            this.playback_icon = "mdi-play";
         },
-        toggleLike(){
-            if(this.color){
-                this.color = null;
-            }else{
-                this.color = "error";
-            }
+        togglePlayState(){
+            if(this.playback_icon == "mdi-pause") this.pauseAudio();
+            else this.playAudio();
+        },
+        async likeTrack(){
+            const url = `https://api.spotify.com/v1/me/tracks?ids=${this.track.id}`;
+            await axios.put(url, {}, {headers: { Authorization: "Bearer " + localStorage.access_token} })
+            this.liked = true;
+        },
+        async unlikeTrack(){
+            const url = `https://api.spotify.com/v1/me/tracks?ids=${this.track.id}`;
+            await axios.delete(url,{headers: { Authorization: "Bearer " + localStorage.access_token} })
+            this.liked = false;
+        },
+        async toggleLike(){
+            if(this.liked) await this.unlikeTrack();
+            else await this.likeTrack();
         },
         stopAudio(){
             this.preview.pause();
             this.preview = null;
             this.track = null
         },
-
+        //The autocomplete search function that calls spotify API
+        doSearch: _.debounce(function() {
+            if(this.search == null || this.search.length == 0) return;
+            this.isLoading = true  //Start the loading bar animation
+            var url = `https://api.spotify.com/v1/search?q=${this.search}&type=artist&market=from_token`;
+            axios.get(url, {headers: {Authorization: "Bearer " + localStorage.access_token}})
+                 .then((response) => {
+                    if(response.data.error || !response.data) 
+                        this.items = [];
+                    else
+                        this.items = response.data.artists.items;
+                    })    
+                .catch(e => console.log(e))
+                .finally(() => (this.isLoading = false))    //End the loading bar animatiom
+        },200),
+        
+        async previewTrackFromArtist(id) {
+            await this.getArtistTopTracks(id);
+            if(this.preview) this.stopAudio();  //stop audio if currently playing   
+            const length = this.artist_top_tracks.length;
+            const random = this.getRandomInt(length-1);
+            if(length > 0){
+                this.track = this.artist_top_tracks[random];
+                this.preview = new Audio(this.track.preview_url);
+            }
+            this.playAudio()
+            this.liked = false;
+        },
+        async getArtistTopTracks(id){
+            var url = `https://api.spotify.com/v1/artists/${id}/top-tracks?market=from_token`;
+            const response = await axios.get(url, {headers: {Authorization: "Bearer " + localStorage.access_token}})
+            const tracks = response.data.tracks;
+            const artist_top_tracks = [];
+            for(let i = 0; i < tracks.length; i++){
+                if(tracks[i].preview_url){
+                    artist_top_tracks.push(tracks[i]);
+                }
+            }
+            this.artist_top_tracks = artist_top_tracks;
+       },
         async getSimilarArtists(){
             const url = `https://api.spotify.com/v1/artists/${this.selected.id}/related-artists`;
-            const response = await axios.get(url, {
-                headers: {
-                    Authorization: "Bearer " + localStorage.access_token,
-                }
-            })
+            const response = await axios.get(url, {headers: {Authorization: "Bearer " + localStorage.access_token}})
             this.related_artists = response.data.artists;
-            
         },
         getRandomInt(max) {
             return Math.floor(Math.random() * Math.floor(max));
