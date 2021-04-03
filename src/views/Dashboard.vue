@@ -4,7 +4,6 @@
 
       <Header header_title="Dashboard" header_background='dashboard' />
 
-
       <Miniboard title="Your Top Artists" background='artist' route='/top-artists' />
       <Miniboard title="Your Top Tracks" background='track' route='/top-tracks' />
       <Miniboard title="Your Recents" background='recent' route='/recently-played' />
@@ -18,8 +17,8 @@
 
 <script>
 
-  import Header from '../components/Header';
-  import Miniboard from '../components/Miniboard';
+  import Header from '@/components/common/Header';
+  import Miniboard from '@/components/common/Miniboard';
 
   export default {
     components: {Header, Miniboard},
@@ -27,10 +26,5 @@
       return {
       }
     },
-    async mounted(){
-      if(!localStorage.access_token){
-        this.$router.push('/');
-      }
-    }
   }
 </script>

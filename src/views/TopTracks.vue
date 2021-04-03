@@ -6,6 +6,7 @@
       <TermButtons @display-top="getUserTop" />
       <Preloader :items="items"/>
       <TrackCards :items="items" type="track" />
+      <Redirect />
 
     </v-container>
 
@@ -14,13 +15,16 @@
 <script>
 
   import axios from 'axios';
-  import Header from '../components/Header';
-  import Preloader from '../components/Preloader';
-  import TermButtons from '../components/TermButtons'
-  import TrackCards from '../components/TrackCards'
+  
+  import Header from '@/components/common/Header';
+  import Preloader from '@/components/common/Preloader';
+  import Redirect from '@/components/common/Redirect';
+
+  import TermButtons from '@/components/usertop/TermButtons';
+  import TrackCards from '@/components/usertop/TrackCards';
 
   export default {
-    components: {Header, Preloader, TermButtons, TrackCards},
+    components: {Header, Preloader, TermButtons, TrackCards, Redirect},
     data() {
       return {
         items: [],
@@ -57,9 +61,6 @@
       },
     },
     async mounted(){
-      if(!localStorage.access_token){
-        this.$router.push('/');
-      }
       await this.getUserTop(this.term);
     }
   }

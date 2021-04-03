@@ -165,6 +165,7 @@
             </v-col>
         </v-row>
 
+        <Redirect />
 
     </v-container>
 </template>
@@ -172,11 +173,13 @@
 <script>
 
 import axios from 'axios';
-import Header from '../components/Header';
 import _ from 'lodash';
 
+import Header from '@/components/common/Header';
+import Redirect from '@/components/common/Redirect';
+
 export default {
-    components: {Header},
+    components: {Header, Redirect},
     data(){
         return{
             //Autocomplete data
@@ -312,11 +315,6 @@ export default {
             return Math.floor(Math.random() * Math.floor(max));
         }
     },
-    async mounted(){
-        if(!localStorage.access_token){
-            this.$router.push('/');
-        }
-    }
 }
 </script>
 
