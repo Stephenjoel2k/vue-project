@@ -89,6 +89,8 @@
             </div>
         </div>
 
+        <v-divider class="ma-3"></v-divider>
+
         <!-- The music player -->
         <!-- Problems: The music progress bar isn't synced. -->
         <div class="text-center" v-if="track!=null">
@@ -96,7 +98,7 @@
 
             <v-card tile>
                 <v-progress-linear
-                :value="20"
+                :value="preview_progress"
                 class="my-0"
                 height="3"
                 ></v-progress-linear>
@@ -133,6 +135,7 @@
             </v-card>
             </v-bottom-sheet>
         </div>
+        
 
         <!-- Similar tracks component -->
         <v-row dense v-if="related_artists.length > 1">
@@ -187,13 +190,14 @@ export default {
             selected: null,    //selected artist info
             related_artists: [],   //related artists similar to the selected artist
 
-
             artist_top_tracks: null,   //top tracks artist the user wants to preview music of
             preview: null,     //preview url
             track: null,       //Track info of the previewing song
             player: false,      //Player state toggle
             playback_icon: "mdi-pause",     //Default playback state
-            liked: false         //Like/Dislike the current song
+            liked: false,         //Like/Dislike the current song
+            preview_progress: 0,
+            timeout: null
         }
     },
     watch: {
@@ -210,16 +214,27 @@ export default {
             this.selected = val;
             await this.getSimilarArtists();
         },
-        async shuffle(){
+        shuffle(){
+            this.preview_progress = 0;
             var length = this.related_artists.length;
             var random = this.getRandomInt(length-1);
             var id = this.related_artists[random].id;
-            await this.previewTrackFromArtist(id);
+            this.previewTrackFromArtist(id);
         },
         playAudio(){
             this.player = true;
             this.playback_icon = "mdi-pause";
             this.preview.play();
+            window.clearTimeout(this.timeout);
+            this.previewProgressUpdate();
+        },
+        previewProgressUpdate() {
+            if(this.preview_progress < 100 && this.playback_icon == "mdi-pause") {
+                this.timeout = setTimeout(() => {
+                    this.preview_progress += 0.33333333333
+                    this.previewProgressUpdate()
+                }, 100)
+            }
         },
         pauseAudio(){
             this.preview.pause();
@@ -247,6 +262,7 @@ export default {
             this.preview.pause();
             this.preview = null;
             this.track = null
+            this.preview_progress = 0;
         },
         //The autocomplete search function that calls spotify API
         doSearch: _.debounce(function() {
@@ -266,13 +282,12 @@ export default {
         
         async previewTrackFromArtist(id) {
             await this.getArtistTopTracks(id);
-            if(this.preview) this.stopAudio();  //stop audio if currently playing   
+            if(this.preview) this.pauseAudio();  //stop audio if currently playing
+            this.preview_progress = 0;   
             const length = this.artist_top_tracks.length;
             const random = this.getRandomInt(length-1);
-            if(length > 0){
-                this.track = this.artist_top_tracks[random];
-                this.preview = new Audio(this.track.preview_url);
-            }
+            this.track = this.artist_top_tracks[random];
+            this.preview = new Audio(this.track.preview_url);
             this.playAudio()
             this.liked = false;
         },
