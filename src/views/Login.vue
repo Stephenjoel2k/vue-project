@@ -26,6 +26,7 @@
           if(localStorage.expiry && localStorage.access_token){
           const time = new Date();
           const expiry = new Date(localStorage.expiry);
+          localStorage.offset = time.getTimezoneOffset();
           if(expiry <= time){
             localStorage.removeItem("access_token");
             localStorage.removeItem("expiry");
