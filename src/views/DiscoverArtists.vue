@@ -66,10 +66,10 @@
             </div>
         </v-card>
 
-        <v-divider class="ma-3"></v-divider>
 
         <!-- Playback button -->
-        <div class="playback-buttons">
+        <div class="playback-buttons" v-if="selected">
+            <v-divider class="ma-3"></v-divider>
             <div class="text-center">
                 <v-btn class="green ma-2" v-if="selected != null" @click="shuffle">
                     <v-icon>
@@ -87,9 +87,8 @@
                     </v-icon>
                 </v-btn>
             </div>
+            <v-divider class="ma-3"></v-divider>
         </div>
-
-        <v-divider class="ma-3"></v-divider>
 
         <!-- The music player -->
         <!-- Problems: The music progress bar isn't synced. -->

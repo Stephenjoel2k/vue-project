@@ -1,5 +1,5 @@
 <template>
-    <v-card flat class="py-2" justify-space-around color="#EAEBEB" :to="route" link :disabled="disable ? true : false">
+    <v-card flat class="my-3" justify-space-around :to="route" link :disabled="disable ? true : false">
         <v-img :src="require('@/assets/' + background + '.jpg')" class="white--text align-end" height="120px">
         <v-card-text>
          
