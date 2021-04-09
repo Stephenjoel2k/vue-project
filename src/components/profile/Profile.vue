@@ -39,7 +39,7 @@ export default {
         }
     },
     async mounted(){
-      await this.getUser(this.term);
+      await this.getUser();
     }
 }
 </script>
