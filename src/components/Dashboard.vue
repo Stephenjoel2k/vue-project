@@ -8,9 +8,10 @@
             <span v-if="greeting" class="greeting">{{greeting}},</span>
             <h1 v-if="profile">{{profile.display_name}}</h1>
             <div class="menu-options">
+                <h3><span @click="routeTo('/recently-played')">Recents</span></h3>
                 <h3><span @click="routeTo('/top-artists')">My Top Artists</span></h3>
                 <h3><span @click="routeTo('/top-tracks')">My Top Tracks</span></h3>
-                <h3><span @click="routeTo('profile')">My Insights</span></h3>
+                <h3><span @click="routeTo('/profile')">My Insights</span></h3>
                 <h3><span @click="routeTo('/discover-artists')">Discover Artists</span></h3>
             </div>
 

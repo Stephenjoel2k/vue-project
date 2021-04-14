@@ -38,7 +38,7 @@ export default {
       drawer: false,
       links: [
         [ 'mdi-account-circle', 'Profile', '/profile' ],
-        [ 'mdi-chart-histogram', 'Dashboard', '/dashboard' ],
+        [ 'mdi-home', 'Home', '/dashboard' ],
         [ 'mdi-account', 'Top Artists', '/top-artists' ],
         [ 'mdi-album', 'Top Tracks',  '/top-tracks' ],
         [ 'mdi-history', 'Recent', '/recently-played' ],

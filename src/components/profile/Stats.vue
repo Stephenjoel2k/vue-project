@@ -90,7 +90,6 @@ export default {
                 { text: 'Position: ', value: 'pos' },
                 { text: 'Followers', value: 'followers' },
                 { text: 'Popularity%', value: 'popularity' },
-                { text: 'Genres', value: 'genres' },
                 { text: 'Streams #', value: 'listens' },
             ],
             artists: [],
@@ -180,7 +179,6 @@ export default {
                     pos: i+1,
                     followers: artist.followers,
                     popularity: artist.popularity,
-                    genres: artist.genres,
                     listens: topArtists[i].listens,
                 };
                 artists.push(artist_schema);
