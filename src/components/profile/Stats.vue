@@ -142,7 +142,7 @@ export default {
             await this.updateTracks();
         },
         async getStatsFromAPI(){
-          const url = "http://yourmusichabit.herokuapp.com/api/user/stats"
+          const url = "https://yourmusichabit.herokuapp.com/api/user/stats"
             const response = await axios.get(url, {
                 headers: {
                     Authorization: "Bearer " + localStorage.access_token,
