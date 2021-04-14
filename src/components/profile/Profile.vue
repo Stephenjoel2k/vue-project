@@ -38,7 +38,7 @@ export default {
           this.profile = JSON.parse(localStorage.getItem('profile'));
         }
     },
-    async mounted(){
+    async beforeMount(){
       await this.getUser();
     }
 }

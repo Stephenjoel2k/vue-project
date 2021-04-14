@@ -321,7 +321,5 @@ export default {
 <style scoped>
     /* CSS Reset */
 a { margin:0; padding:0; font-size:100%; line-height:1; text-underline-offset: none;}
-  .container{
-    padding: 0!important;
-  }
+
 </style>
