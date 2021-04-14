@@ -47,6 +47,15 @@
                 </div>
                 </v-expansion-panel-content>
             </v-expansion-panel>
+            <v-expansion-panel>
+                <v-expansion-panel-header>
+                    Alert
+                </v-expansion-panel-header>
+                <v-expansion-panel-content>
+                    <h3>Come back again tomorrow if you don't see any data!</h3>
+                    <h3>It takes 2 hours from the time you register for the app to track your stats.</h3>
+                </v-expansion-panel-content>
+            </v-expansion-panel>
         </v-expansion-panels>
 
         
