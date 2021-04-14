@@ -3,13 +3,14 @@
      <v-container justify-center>
 
        <div class="hidden-sm-and-up">
-         <Dashboard :profile="profile" />
+          <Dashboard :profile="profile" />
        </div>
 
       <div class="hidden-sm-and-down">
-        <Miniboard title="Your Top Artists" background='artist' route='/top-artists' />
-        <Miniboard title="Your Top Tracks" background='track' route='/top-tracks' />
-        <Miniboard title="Your Recents" background='recent' route='/recently-played' />
+        <Miniboard title="My Top Artists" background='artist' route='/top-artists' />
+        <Miniboard title="My Top Tracks" background='track' route='/top-tracks' />
+        <Miniboard title="My Recents" background='recent' route='/recently-played' />
+        <Miniboard title="My Insights" background='insight' route='/profile' />
         <Miniboard title="Discover Artists" background='discover' route='/discover-artists' />
       </div>
 

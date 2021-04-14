@@ -1,10 +1,10 @@
 <template>
   <v-card
   >
-    <v-bottom-navigation dark app class="d-md-none black" fixed grow>
+    <v-bottom-navigation dark app color="primary" class="d-md-none black" fixed>
       
       <v-btn to=/profile text>
-        <span>My Insights</span>
+        <span>Insights</span>
         <v-icon>mdi-chart-histogram</v-icon>
       </v-btn>
 
@@ -12,7 +12,13 @@
         <span>Home</span>
         <v-icon>mdi-home</v-icon>
       </v-btn>
-      
+
+      <v-btn to=/discover-artists text>
+        <span>Discover</span>
+        <v-icon>mdi-account-search</v-icon>
+      </v-btn>
+
+       
 
     </v-bottom-navigation>
   </v-card>

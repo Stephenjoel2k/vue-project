@@ -1,5 +1,5 @@
 <template>
-    <Header :v-if="profile" :header_title=profile.display_name header_background="profile" />
+    <Header :v-if="profile" :header_title=profile.display_name header_background="insight" />
 </template>
 
 <script>

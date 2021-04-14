@@ -8,13 +8,12 @@
             <span v-if="greeting" class="greeting">{{greeting}},</span>
             <h1 v-if="profile">{{profile.display_name}}</h1>
             <div class="menu-options">
-                <h3><span @click="routeTo('/recently-played')">Recents</span></h3>
-                <h3><span @click="routeTo('/top-artists')">My Top Artists</span></h3>
-                <h3><span @click="routeTo('/top-tracks')">My Top Tracks</span></h3>
-                <h3><span @click="routeTo('/profile')">My Insights</span></h3>
-                <h3><span @click="routeTo('/discover-artists')">Discover Artists</span></h3>
+                <Miniboard title="My Top Artists" background='artist' route='/top-artists' />
+                <Miniboard title="My Top Tracks" background='track' route='/top-tracks' />
+                <Miniboard title="My Recents" background='recent' route='/recently-played' />
+                <Miniboard title="My Insights" background='insight' route='/profile' />
+                <Miniboard title="Discover Artists" background='discover' route='/discover-artists' />
             </div>
-
         </div>
     </header>
     
@@ -23,9 +22,11 @@
 
 <script>
 import axios from 'axios';
+import Miniboard from '@/components/common/Miniboard';
 
 export default {
     name: 'Dashboard',
+    components: {Miniboard},
     props: {
         profile: Object,
     },
@@ -151,7 +152,9 @@ export default {
 <style scoped>
 
     header{
-        height: 90vh;
+        height: 70vh;
+        max-height: 450px;
+        border-radius: 0 0 90px 20px;
     }
 
     .images{
@@ -221,12 +224,11 @@ export default {
     .menu-options{
         position: relative;
         top: 75px;
-    }
-
-    .menu-options h3{
         font-family:'Signika', sans-serif;
-        text-decoration: underline;
-        animation: floatText 2s alternate ease-in-out;
+        padding-bottom: 80px;
+        -webkit-animation: fadein 2s alternate, mover 2.25s infinite  alternate ;
+        animation: fadein 2s alternate, mover 2.25s infinite  alternate ;
+        animation-delay: 0ms, 3000ms;
     }
 
     @-webkit-keyframes floatText{
@@ -234,5 +236,12 @@ export default {
         66%{ left: 0%; opacity: 0; }
         100% { left: 10%; opacity: 1;}
     }
+
+    @keyframes floatText{
+        0% {left: 0%; opacity: 0; }
+        66%{ left: 0%; opacity: 0; }
+        100% { left: 10%; opacity: 1;}
+    }
+
 
 </style>

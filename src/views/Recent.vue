@@ -1,7 +1,7 @@
 <template>
     <v-container width=80 justify-center>
  
-      <Header header_title="Your Recents" header_background='recent' />
+      <Header header_title="My Recents" header_background='recent' />
       <Recent />
       <Redirect />
 

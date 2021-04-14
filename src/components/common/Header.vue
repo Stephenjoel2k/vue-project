@@ -26,7 +26,7 @@ export default {
     methods: {
       formatBg(header_background){
         if(header_background.length < 12){
-          return require('@/assets/' + header_background + '.jpg');
+          return require('@/assets/' + header_background + '.png');
         }else{
           return header_background
         }
