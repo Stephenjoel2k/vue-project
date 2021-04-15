@@ -188,6 +188,8 @@ export default {
             tab: null,
             search: null,
             type: "artist",
+            
+            endless: true,
 
             selected: null,    //selected artist info
             related_artists: [],   //related artists similar to the selected artist
@@ -236,6 +238,8 @@ export default {
                     this.preview_progress += 0.33333333333
                     this.previewProgressUpdate()
                 }, 100)
+            }else if(this.endless && this.playback_icon == "mdi-pause"){
+                this.shuffle();
             }
         },
         pauseAudio(){
