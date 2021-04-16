@@ -1,6 +1,6 @@
 <template>
-  <v-app>
-    <Navbar />   
+  <v-app v-bind:style="bgc">
+    <Navbar @toggleMode="toggleMode"/>   
     <v-main>
       <v-banner
         v-if="deferredPrompt" color="info" dark class="text-left">
@@ -27,7 +27,10 @@ export default {
   components: { Navbar, BottomNavbar },
   data() {
     return {
-      deferredPrompt: null
+      deferredPrompt: null,
+      bgc: {
+        backgroundColor: '',
+      }
     };
   },
   created() {
@@ -47,6 +50,22 @@ export default {
     async install() {
       this.deferredPrompt.prompt();
     },
+    applyTheme(){
+      const theme = localStorage.getItem('theme');
+      if(theme && theme == 'dark'){
+        this.bgc.backgroundColor = "#161b22";
+      }else{
+        this.bgc.backgroundColor = "#eaebeb";
+     }
+    },
+    toggleMode(mode){
+      if(mode.lightMode){
+        localStorage.setItem('theme', 'light') 
+      }else{
+        localStorage.setItem('theme', 'dark')
+      }
+      this.applyTheme();
+    },
     isValidStorage() {
       //If user never logged in
 
@@ -63,6 +82,7 @@ export default {
     },
   },
   mounted: function () {
+     this.applyTheme();
      if(!localStorage.access_token){
         this.$router.push('/');
       }
@@ -78,7 +98,6 @@ export default {
 
 <style>
   #app{
-    background: #EAEBEB;
     overflow-x: hidden;
   }
 </style>

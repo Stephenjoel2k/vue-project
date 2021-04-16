@@ -12,7 +12,6 @@
             </v-btn-toggle>
         </v-row>
 
-
         <!-- Searchbar to search a artists/Tracks -->
         <v-autocomplete 
             dark :search-input.sync="search" :items="items" :readonly="inspirations.length >= 5" :loading="isLoading" chips clearable hide-details hide-selected item-text="name" item-value="id" :label="queryLabel" @input="displaySimilar" return-object solo rounded>
@@ -73,7 +72,7 @@
 
 
                 <!-- Add sliders -->
-                <!-- Popularity Slider -->
+
                 <v-card-text>
                     <h5>Beta</h5>
                 </v-card-text>
@@ -82,9 +81,58 @@
             </v-card>
 
 
+
             <TrackCards :items="playlistItems" type="track" />
 
+        <v-card class="my-5">
+            <v-row>
+                <v-col xl="4" lg="4" md="6" sm="12" cols="12">
+                    <v-subheader class="pl-0">
+                    Show thumb when using slider
+                    </v-subheader>
+                    <v-slider
+                    v-model="slider"
+                    thumb-label
+                    ></v-slider>
+                </v-col>
 
+                <v-col xl="4" lg="4" md="6" sm="12" cols="12">
+                    <v-subheader class="pl-0">
+                    Always show thumb label
+                    </v-subheader>
+                    <v-slider
+                    v-model="slider"
+                    vertical
+                    ></v-slider>
+                </v-col>
+
+                <v-col xl="4" lg="4" md="6" sm="12" cols="12">
+                    <v-subheader class="pl-0">
+                    Popularity : {{displayPopularityInfo()}}
+                    </v-subheader>
+                    <v-slider
+                    vertical
+                    v-model="popularity"
+                    ></v-slider>
+                </v-col>
+
+                <v-col xl="4" lg="4" md="6" sm="12" cols="12">
+                    <v-subheader class="pl-0">
+                    Mood : {{ satisfactionEmojis[Math.min(Math.floor(slider / 10), 9)] }}
+                    </v-subheader>
+                    <v-slider
+                    v-model="slider"
+                    :thumb-size="24"
+                    thumb-label="always"
+                    >
+                    <template v-slot:thumb-label="{ value }">
+                        {{ satisfactionEmojis[Math.min(Math.floor(value / 10), 9)] }}
+                    </template>
+                    </v-slider>
+                </v-col>
+            </v-row>
+        </v-card>
+        
         
         
 
@@ -120,8 +168,16 @@ export default {
             inspirations: [],
             
             //sliders
+            satisfactionEmojis: ['😭', '😢', '☹️', '🙁', '😐', '🙂', '😊', '😁', '😄', '😍'],
             popularity: 50,
+            slider: 45,
+            
+
+            //playlists
             playlistItems: [],
+            playlistName: "MusicHabits - Discover",
+            playlistDescription: "Highly personalized with MusicHabits based on your inspirations. Check musichabits.netlify.app for more",
+            playlistId: null,
 
         }
     },
@@ -135,11 +191,10 @@ export default {
       },
     },
     methods: {
-        increase (val) {
-            Object.keys(val)[0] += Object.values(val)[0] - 10 || 0;
-        },
-        decrease (val) {
-            Object.keys(val)[0] += Object.values(val)[0] - 10 || 0;
+        displayPopularityInfo(){
+            if(this.popularity <= 33) return 'Playing at Bars'
+            else if(this.popularity > 33 && this.popularity < 67) return 'Rising/Up and coming'
+            else return 'World Tour/Trending'
         },
         toggleSearch(type){
             this.type = type;
@@ -222,6 +277,40 @@ export default {
                         this.playlistItems = response.data.tracks;
                     })    
                 .catch(e => console.log(e))
+            this.createPlaylist();
+        },
+        async createPlaylist(){
+            const user = JSON.parse(localStorage.getItem("profile"));
+            const url = 'https://api.spotify.com/v1/users/' + user.id + '/playlists';
+            const response = await axios(url, {
+                method: 'POST',
+                headers: {
+                    'Authorization' : 'Bearer ' + localStorage.access_token,
+                    'Content-Type': 'application/json'
+                },
+                data: {
+                    "name": this.playlistName,
+                    "description": this.playlistDescription,
+                    "public": false
+                }
+            })
+            this.playlistId = response.data.id;
+            this.addTracksToPlaylist();
+        },
+        async addTracksToPlaylist(){
+            const uris = [];
+            this.playlistItems.forEach(track => {
+                uris.push(track.uri);
+            })
+
+            const url = `https://api.spotify.com/v1/playlists/${this.playlistId}/tracks?uris=${uris}`;
+            await axios(url, {
+                method: 'POST',
+                headers: {
+                    'Authorization' : 'Bearer ' + localStorage.access_token,
+                    'Content-Type': 'application/json'
+                },
+            })
         }
     },
     async mounted(){

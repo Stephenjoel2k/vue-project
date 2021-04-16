@@ -1,5 +1,5 @@
 <template>
-    <v-card flat class="my-5">
+    <v-card flat class="my-5" color="#161b22">
         <v-img :src="formatBg(header_background)" class="white--text align-end" height="300px">
         <v-card-text>
          

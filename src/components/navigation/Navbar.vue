@@ -10,6 +10,11 @@
               <span class="font-weight-dark">habits.</span>
             </h3>
         </v-app-bar-title>
+        <v-spacer></v-spacer>
+
+      <v-btn icon @click="$emit('toggleMode', {lightMode}); lightMode = !lightMode">
+        <v-icon color="white">mdi-theme-light-dark</v-icon>
+      </v-btn>
     </v-app-bar>
 
     <!-- Sidebar the one that toggles -->
