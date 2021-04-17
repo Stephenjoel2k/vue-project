@@ -8,6 +8,7 @@ import Dashboard from '../views/Dashboard.vue'
 import Profile from '../views/Profile.vue'
 import DiscoverArtists from '../views/DiscoverArtists.vue'
 import PlaylistGenerator from '../views/PlaylistGenerator.vue'
+import MusicMatch from '../views/MusicMatch.vue'
 
 Vue.use(VueRouter)
 
@@ -52,7 +53,12 @@ const routes = [
     path: '/generate-playlists',
     name: 'PlaylistGenerator',
     component: PlaylistGenerator
-  }
+  },
+  {
+    path: '/musicmatch',
+    name: 'MusicMatch',
+    component: MusicMatch
+  },
 ]
 
 const router = new VueRouter({

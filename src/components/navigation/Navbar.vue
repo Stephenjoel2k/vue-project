@@ -48,7 +48,8 @@ export default {
         [ 'mdi-album', 'Top Tracks',  '/top-tracks' ],
         [ 'mdi-history', 'Recent', '/recently-played' ],
         [ 'mdi-account-search', 'Discover Artists', '/discover-artists' ],
-        [ 'mdi-playlist-plus', 'Playlist Generator', '/generate-playlists' ]
+        [ 'mdi-playlist-plus', 'Playlist Generator', '/generate-playlists' ],
+        [ 'mdi-account-plus', 'Music Match', '/musicmatch' ]
       ],
       value: 1,
       lightMode: localStorage.getItem('theme') ? (localStorage.getItem('theme') == 'light' ? true : false ) : false

@@ -5,7 +5,7 @@
          
           <v-row align="center" justify="center">
             <v-col cols="12" class="mb-3">
-              <h1 class="text-center  text-lg-h3 text-sm-h5">
+              <h1 class="text-center  text-lg-h2 text-sm-h5">
                 {{title}}
               </h1>
             </v-col>

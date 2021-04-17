@@ -2,7 +2,7 @@
  
      <v-container justify-center>
 
-       <div class="hidden-sm-and-up">
+       <div class="hidden-md-and-up">
           <Dashboard :profile="profile" />
        </div>
 
