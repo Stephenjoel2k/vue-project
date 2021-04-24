@@ -75,7 +75,7 @@ export default {
 
 <style>
 #app {
-  overflow: hidden;
+  overflow: auto;
 }
 
 .fade-enter-active,
