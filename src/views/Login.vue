@@ -1,14 +1,24 @@
 <template>
     <div class="Home">
-      <v-container width=80 justify-center>
+      <v-container justify-center>
       <!-- Display if content is true -->
         <div v-if="content">
-          <h2>Please Connect with spotify to continue!</h2>
-          <!-- Placeholder until hosted -->
-          <v-btn color="green" href= "https://yourmusichabit.herokuapp.com/auth/login"> 
-            <v-icon left>mdi-import</v-icon>
-            <span>Spotify</span>
-          </v-btn>
+          <header>
+            <div class="images">
+                <v-img v-if="random1" :src="random1" class="under" width="180px" height="180px" > </v-img>
+                <v-img v-if="random2" :src="random2" class="above" width="170px" height="170px"/>
+            </div>
+            <div class="menu">
+              <h2>Please Connect with spotify to continue!</h2>
+              <!-- Placeholder until hosted -->
+              <v-btn color="green" href= "https://yourmusichabit.herokuapp.com/auth/login"> 
+                <v-icon left>mdi-import</v-icon>
+                <span>Spotify</span>
+              </v-btn>
+                <h1>Welcome, Guest</h1>
+            </div>
+        </header>
+          
         </div>
       </v-container>
     </div>
@@ -53,3 +63,18 @@
     }
   }
 </script>
+
+<style>
+
+.container{
+    padding: 0;
+  }
+
+header{
+        height: 70vh;
+        max-height: 450px;
+        border-radius: 0 0 80% 20%;
+        background: rgb(233, 196, 32);
+    }
+
+</style>

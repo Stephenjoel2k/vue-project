@@ -7,7 +7,7 @@
         <!-- Search and Toggler -->
         <v-row align="center">
             <v-col xl="10" lg="10" md="10" sm="10" cols="8">
-                <v-autocomplete 
+                <v-autocomplete class="ml-5"
                     dark :search-input.sync="search" :items="items" :readonly="inspirations.length >= 5" :loading="isLoading" chips clearable hide-details hide-selected item-text="name" item-value="id" :label="queryLabel" @input="displaySimilar" return-object solo rounded>
                         <template v-slot:no-data>
                             <v-list-item>

@@ -3,10 +3,10 @@
   >
     <v-bottom-navigation dark app color="primary" class="d-md-none black" fixed>
       
-      <!-- <v-btn to=/profile text>
+      <v-btn to=/profile text>
         <span>Insights</span>
         <v-icon>mdi-chart-histogram</v-icon>
-      </v-btn> -->
+      </v-btn>
 
       <v-btn to=/dashboard text>
         <span>Home</span>
@@ -23,10 +23,10 @@
         <v-icon>mdi-playlist-plus</v-icon>
       </v-btn>
 
-      <v-btn to=/musicmatch text>
+      <!-- <v-btn to=/musicmatch text>
         <span>Match</span>
         <v-icon>mdi-account-plus</v-icon>
-      </v-btn>
+      </v-btn> -->
 
     </v-bottom-navigation>
   </v-card>

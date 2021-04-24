@@ -4,8 +4,8 @@
         <Header header_title="Discover Artists" header_background='discover' />
         
         <!-- Searchbar to search a artists -->
-        <v-autocomplete 
-            dark :search-input.sync="search" :items="items" :loading="isLoading" chips clearable hide-details hide-selected item-text="name" item-value="id" label="Search an Artist" @input="displaySimilar" return-object solo rounded>
+        <v-autocomplete class="mx-5"
+            dark :search-input.sync="search" :items="items" :loading="isLoading" chips clearable hide-details hide-selected item-text="name" item-value="id" label="Search an Artist" @input="displaySimilar" return-object solo>
 
                 <template v-slot:no-data>
                     <v-list-item>
@@ -91,13 +91,12 @@
         </div>
 
         <!-- The music player -->
-        <!-- Problems: The music progress bar isn't synced. -->
         <div class="text-center" v-if="track!=null">
             <v-bottom-sheet dark inset v-model="player">
 
             <v-card tile>
                 <v-progress-linear
-                :value="preview_progress"
+                :value="this.$store.state.savedPreviewProgress"
                 class="my-0"
                 height="3"
                 ></v-progress-linear>
@@ -189,7 +188,7 @@ export default {
             search: null,
             type: "artist",
             
-            endless: true,
+            endless: false,
 
             selected: null,    //selected artist info
             related_artists: [],   //related artists similar to the selected artist
@@ -200,9 +199,12 @@ export default {
             player: false,      //Player state toggle
             playback_icon: "mdi-pause",     //Default playback state
             liked: false,         //Like/Dislike the current song
-            preview_progress: 0,
+            preview_progress: this.$store.state.savedPreviewProgress,
             timeout: null
         }
+    },
+    created: function(){      
+        this.getSelected();
     },
     watch: {
         search() {
@@ -214,12 +216,31 @@ export default {
       },
     },
     methods: {
+        //Vuex
+        getSelected() {
+            var savedSelection = this.$store.state.savedSelection;
+            if (savedSelection) {
+                this.selected = savedSelection;
+                var savedSimilar = this.$store.state.savedSimilar;
+                if(savedSimilar){
+                    this.related_artists = savedSimilar;
+                }
+                var savedPreview = this.$store.state.savedPreview;
+                var savedTrack = this.$store.state.savedTrack;
+                if(savedPreview){
+                    this.preview = savedPreview;
+                    this.track = savedTrack;
+                }
+            }
+        },
         displaySimilar: async function(val){
             this.selected = val;
+            this.$store.commit('saveSelection', this.selected);
             await this.getSimilarArtists();
         },
         shuffle(){
             this.preview_progress = 0;
+            this.$store.commit('savePreviewProgress', this.preview_progress);
             var length = this.related_artists.length;
             var random = this.getRandomInt(length-1);
             var id = this.related_artists[random].id;
@@ -233,9 +254,10 @@ export default {
             this.previewProgressUpdate();
         },
         previewProgressUpdate() {
-            if(this.preview_progress < 100 && this.playback_icon == "mdi-pause") {
+            if(this.preview_progress < 100 && !this.preview.paused) {
                 this.timeout = setTimeout(() => {
                     this.preview_progress += 0.33333333333
+                    this.$store.commit('savePreviewProgress', this.preview_progress);
                     this.previewProgressUpdate()
                 }, 100)
             }else if(this.endless && this.playback_icon == "mdi-pause"){
@@ -269,6 +291,7 @@ export default {
             this.preview = null;
             this.track = null
             this.preview_progress = 0;
+            this.$store.commit('savePreviewProgress', this.preview_progress);
         },
         //The autocomplete search function that calls spotify API
         doSearch: _.debounce(function() {
@@ -288,12 +311,15 @@ export default {
         
         async previewTrackFromArtist(id) {
             await this.getArtistTopTracks(id);
-            if(this.preview) this.pauseAudio();  //stop audio if currently playing
+            if(this.preview) this.stopAudio();  //stop audio if currently playing
             this.preview_progress = 0;   
+            this.$store.commit('savePreviewProgress', this.preview_progress);
             const length = this.artist_top_tracks.length;
             const random = this.getRandomInt(length-1);
             this.track = this.artist_top_tracks[random];
+            this.$store.commit('saveTrack', this.track);
             this.preview = new Audio(this.track.preview_url);
+            this.$store.commit('savePreview', this.preview);
             this.playAudio()
             this.liked = false;
         },
@@ -313,6 +339,7 @@ export default {
             const url = `https://api.spotify.com/v1/artists/${this.selected.id}/related-artists`;
             const response = await axios.get(url, {headers: {Authorization: "Bearer " + localStorage.access_token}})
             this.related_artists = response.data.artists;
+            this.$store.commit('saveSimilar', this.related_artists);
         },
         getRandomInt(max) {
             return Math.floor(Math.random() * Math.floor(max));
